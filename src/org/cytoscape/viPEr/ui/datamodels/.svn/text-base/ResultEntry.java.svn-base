@@ -1,0 +1,35 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.cytoscape.csplugin.ui.datamodels;
+
+/**
+ * Classdefinition for Resultentries
+ * @author MGarmhausen
+ */
+public class ResultEntry {
+    private float score;
+    private String path;
+    
+    public float getScore(){
+        return score;
+    }
+    
+    public String getPath(){
+        return path;
+    }
+    
+    public void setScore(float value){
+        this.score = value;
+    }
+    
+    public void setPath(String text){
+        this.path = text;
+    }
+    
+    public ResultEntry(float value, String text){
+        this.path = text;
+        this.score = value;
+    }
+}
