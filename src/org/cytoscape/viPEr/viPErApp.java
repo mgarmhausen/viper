@@ -1,7 +1,16 @@
+/*
+Program: Viper is a plug-in for Cytoscape. Its purpose is to generate subnetworks
+based on short distance connections integrated with high-throughput expression data.
+These focus networks help untangling the hairball usually presented when working with
+biological network data.
+
+Author: Marius Garmhausen
+Contact: marius@garmhausen.com
+Version: 0.1
+*/
 package org.cytoscape.viPEr;
 
-
-
+//Import cytoscape classes
 import org.cytoscape.app.AbstractCyApp;
 import org.cytoscape.app.CyAppAdapter;
 import org.cytoscape.app.swing.CySwingAppAdapter;
@@ -22,19 +31,10 @@ import org.cytoscape.viPEr.ui.datamodels.ResultEntry;
 import org.cytoscape.viPEr.ui.widgets.RangeSlider;
 import org.cytoscape.view.model.CyNetworkViewManager;
 
-
-
-
-//import org.apache.commons.lang.ArrayUtils;
-//import org.apache.commons.math3.distribution.HypergeometricDistribution;
+//import function for hypergeometric testing
 import jsc.distributions.Hypergeometric;
 
-
-
-
-
-
-
+//import awt components
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+//Import Swing components
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
@@ -86,38 +87,7 @@ import javax.swing.table.TableModel;
 import javax.swing.text.GapContent;
 
 
-//////////////
-//import cytoscape.CyNetwork;
-//import cytoscape.CyNode;
-//import cytoscape.Cytoscape;
-//import cytoscape.data.CyAttributes;
-//import cytoscape.plugin.CytoscapePlugin;
-//import cytoscape.view.cytopanels.CytoPanelImp;
-//import giny.model.Node;
-//import java.awt.Dimension;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
-//import javax.swing.*;
-//import javax.swing.event.ChangeEvent;
-//import javax.swing.event.ChangeListener;
-//import javax.swing.event.ListSelectionEvent;
-//import javax.swing.event.ListSelectionListener;
-//import javax.swing.table.*;
-//import org.apache.commons.lang.ArrayUtils;
-//import org.cytoscape.csplugin.ui.datamodels.PathfinderCellRenderer;
-//import org.cytoscape.csplugin.ui.widgets.RangeSlider;
-//import org.cytoscape.csplugin.ui.datamodels.PathfinderTableModel;
-//import org.cytoscape.csplugin.ui.datamodels.ResultEntry;
-//import java.awt.Color;
-//import javax.swing.JPanel;
-////import org.cytoscape.plugin.complexfinder.GUI;
-//import java.io.File;
-//import java.io.FileWriter;
-//import java.io.BufferedWriter;
-//import java.io.IOException;
-//import org.cytoscape.plugin.complexfinder.model.ComplexFinderModel;
-//////////
-
+//Main wrapper function for Cytoscape apps
 public class viPErApp extends AbstractCyApp implements ActionListener{
 	
 	//Variable initialization
@@ -188,7 +158,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
     private final JFileChooser resultFileChooser = new JFileChooser();
     
 
-    		
+    //Add new panel in the left container
     public static class MyCytoPanel extends JPanel implements CytoPanelComponent {				
     	public MyCytoPanel() {  		    
   		  }  
@@ -208,6 +178,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
   		}  
 	}
     
+	//Add results panel tab in the result panel to the right
     public static class MyResultPanel extends JPanel implements CytoPanelComponent {
     	public MyResultPanel() {
 		  }  
@@ -228,12 +199,11 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
     }
     
     	
-    
+    //Main class
     public viPErApp(CySwingAppAdapter cySwingAppAdapter) {
-    	super(cySwingAppAdapter);
-        
-    	System.out.println("Ich hasse Cytoscape 3");
+    	super(cySwingAppAdapter);      
     	
+		//create settings panel
     	MyCytoPanel controlPanel = new MyCytoPanel();	
     	
     	java.awt.GridBagConstraints gridBagConstraints;
@@ -248,10 +218,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
 
         functionStartPanel = new JPanel();
         functionStartPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("3. - Start Function"));
-        
-//        scoreComplexPanel = new JPanel();
-//        scoreComplexPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("4. - Score Complexes (optional)"));
-    	
+  	
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -279,20 +246,8 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
         functionStartPanel.setMinimumSize(new java.awt.Dimension(400, 50));
         functionStartPanel.setPreferredSize(new java.awt.Dimension(400, 250));
         controlPanel.add(functionStartPanel, gridBagConstraints);
-        
-//        gridBagConstraints = new java.awt.GridBagConstraints();
-//        gridBagConstraints.gridx = 1;
-//        gridBagConstraints.gridy = 4;
-//        gridBagConstraints.gridwidth = 1;
-//        scoreComplexPanel.setMaximumSize(new java.awt.Dimension(400, 32767));
-//        scoreComplexPanel.setMinimumSize(new java.awt.Dimension(400, 50));
-//        scoreComplexPanel.setPreferredSize(new java.awt.Dimension(400, 50));
-//        controlPanel.add(scoreComplexPanel, gridBagConstraints);
-        
-        
-
+       
         loadNetworkLabel = new javax.swing.JLabel();
-
 
         stepNumberLabel = new javax.swing.JLabel();
         stepNumberTextfield = new javax.swing.JTextField();
@@ -307,7 +262,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
 
         parameterSelectionPanel.setLayout(new java.awt.GridBagLayout());
         functionStartPanel.setLayout(new java.awt.GridBagLayout());
-        //scoreComplexPanel.setLayout(new java.awt.GridBagLayout());
 
         loadNetworkLabel.setText("Load Network");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -334,9 +288,8 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
         nodeAttributeCombox.setMaximumSize(new java.awt.Dimension(34, 50));
         parameterSelectionPanel.add(nodeAttributeCombox, gridBagConstraints);
         
-        
-        
-        
+               
+        //Register panel with gui
     	cySwingAppAdapter.getCyServiceRegistrar().registerService(
     			controlPanel,
     			CytoPanelComponent.class,
@@ -348,6 +301,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
         //if combobox entry changes fit the slider to the value range of the new attribute
         nodeAttributeCombox.addActionListener(new ActionListener() {
 
+		//React on user input
         @Override
             public void actionPerformed(ActionEvent ae) {
                 Double minimum = null;
@@ -356,8 +310,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                 CyNetwork current_Network = adapter.getCyApplicationManager().getCurrentNetwork();
                 List<CyNode> selectedNodes = current_Network.getNodeList();
 
-                //CyNetwork.getRow()
-                //CyTable cyNodeAttrs = current_Network.getRow(selectedNodes); //Cytoscape.getNodeAttributes();
                 List<CyNode> nodeList = current_Network.getNodeList();
 
                 Iterator<CyNode> it = nodeList.iterator();
@@ -365,8 +317,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                     try{
                         CyNode aNode = (CyNode) it.next();
                         if (minimum == null){                        	
-                        	minimum = current_Network.getRow(aNode).get(nodeAttributeCombox.getSelectedItem().toString(), double.class);		
-                            //minimum = cyNodeAttrs.getDoubleAttribute(aNode.getSUID().toString(),nodeAttributeCombox.getSelectedItem().toString());
+                        	minimum = current_Network.getRow(aNode).get(nodeAttributeCombox.getSelectedItem().toString(), double.class);		                          
                         }
                         else if (current_Network.getRow(aNode).get(nodeAttributeCombox.getSelectedItem().toString(), double.class) < minimum){
                             minimum = current_Network.getRow(aNode).get(nodeAttributeCombox.getSelectedItem().toString(), double.class);
@@ -404,6 +355,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
         rSlider.setPaintTicks(true);
         rSlider.addChangeListener(new ChangeListener() {
 
+		//Set slider values to edit fields
         @Override
         public void stateChanged(ChangeEvent ce) {
             minRangeTextfield.setText("" + ((double)rSlider.getValue())/10);
@@ -491,34 +443,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 3;
         depthSearchButton.addActionListener(this);
-        functionStartPanel.add(depthSearchButton, gridBagConstraints);
-
-        //Button for reducing network to complexes
- /*       buildComplexButton = new JButton("Build Comlexes");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        buildComplexButton.addActionListener(this);
-        functionStartPanel.add(buildComplexButton, gridBagConstraints);*/
-
-        //Button for selecting all pathways the selected nodes are included in
-    /*    selectPathsFromNodesButton = new JButton("Select Paths from Nodes");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        selectPathsFromNodesButton.addActionListener(this);
-        functionStartPanel.add(selectPathsFromNodesButton, gridBagConstraints);*/
-
-        //Button for exporting found Pathway table
-/*        exportResultsTableButton = new JButton("Export Found Pathways");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        exportResultsTableButton.addActionListener(this);
-        functionStartPanel.add(exportResultsTableButton, gridBagConstraints);*/
+        functionStartPanel.add(depthSearchButton, gridBagConstraints);      
         
         //Button for Selecting a list of start genes
         startProtSelectionButton = new JButton("Select Start Proteinlist");
@@ -548,26 +473,10 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
         startBatch.addActionListener(this);
         functionStartPanel.add(startBatch, gridBagConstraints);
         
-
-     /*   scoreComplexButton = new JButton("Score Complexes");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        scoreComplexButton.addActionListener(this);
-        scoreComplexPanel.add(scoreComplexButton, gridBagConstraints);*/
-        
-        
-
-        //CytoPanelImp resultPanelParent = (CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
-
-        //create and insert "Result Panel" for results tab
-        	
-        
+        //create and insert "Result Panel" for results tab        	       
         CytoPanel cypan = cySwingAppAdapter.getCySwingApplication().getCytoPanel(CytoPanelName.EAST);
         
         cypan.setState(CytoPanelState.DOCK);
-        
         
         resultsPanel = new MyResultPanel();
         cySwingAppAdapter.getCyServiceRegistrar().registerService(
@@ -575,16 +484,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
     			CytoPanelComponent.class,
     			new Properties()
 		);
-        
-        
-        
-        
-        
-        //resultPanelParent.add("Results", resultsPanel);
-
-
-        // Make Result window visible
-        //resultPanelParent.setVisible(true);
     }
 	
 	
@@ -593,12 +492,11 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             }
     }
 
+	//Recursive function to find all paths of certain length between 2 nodes
     public void rec_path(int count, CyNode node, List<CyNode> origin, CyNetwork G){ 		    
-    	//origin.add(node.getSUID().toString());
     	origin.add(node);
     	
         if ((count < maxcount) && (!node.equals(target))){
-//            List<Node> nebList = G.neighborsList(Cytoscape.getCyNode(node));
             List<CyNode> nebList = G.getNeighborList(node, CyEdge.Type.valueOf("ANY"));
             Iterator<CyNode> it = nebList.iterator();
             while (it.hasNext()){
@@ -624,14 +522,12 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
         }
     }
         
+	//Recursive function to search n steps into the network from start node on
     public void rec_depth_path(int count, CyNode node, List<CyNode> origin, CyNetwork G, int uCount){
-        //origin.add(node.getSUID().toString());
     	origin.add(node);
         Double value;
         Double originValue;
         
-        
-
         if (count < maxcount){
             List<CyNode> nebList = G.getNeighborList(node, CyEdge.Type.valueOf("ANY"));
             Iterator<CyNode> it = nebList.iterator();
@@ -671,8 +567,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             List<CyNode> dest = new ArrayList<CyNode>(origin);
             pfadliste.add(dest);
         }
-        //List<String> dest = new ArrayList<String>(origin);
-        //pfadliste.add(dest);
 
         if (origin.size() > 0){
             origin.remove(origin.size()-1);
@@ -685,7 +579,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
         return false;
     }
 
-	
+	//Path rating to be implemented here
     public void rate_paths (){
 
     }
@@ -772,12 +666,10 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                         
                         try{
                             //create String with names output for result list
-                            if (!tempPathNames.isEmpty()) {
-                                    //tempPathNames = tempPathNames + "," + current_Network.getRow(tempstring).get(nodeAttributeCombox.getSelectedItem().toString(), double.class) cyAttrList.getStringAttribute(tempstring, "label");
+                            if (!tempPathNames.isEmpty()) {                                   
                                     tempPathNames = tempPathNames + "," + current_Network.getRow(tempstring).get("name", String.class);
                             }
                             else {
-                                    //tempPathNames = cyAttrList.getStringAttribute(tempstring, "label");
                                     tempPathNames = current_Network.getRow(tempstring).get("name", String.class);
                             }
                         }
@@ -814,7 +706,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                 List<CyNode> nodeArray = subNetworkNodes;
                 List<CyEdge> edgeArray = new ArrayList<CyEdge>();
                 for (CyNode node : nodeArray){
-                	//List<CyEdge> tempEdgeArray = current_root_Network.getAdjacentEdgeList(node, CyEdge.Type.valueOf("ANY"));
                 	for (CyNode node2 : nodeArray){
                 		List<CyEdge> tempEdgeArray = current_root_Network.getConnectingEdgeList(node, node2, CyEdge.Type.valueOf("ANY"));
                 		
@@ -841,8 +732,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             String[][] data = new String[pathObjList.size()][3];
 
             //include pathlength is calculation
-            for (int i=0;i<pathObjList.size(); i++){
-                    //data[i][0] = pathObjList.get(i).calculate_rating(Double.parseDouble(minRangeTextfield.getText()), Double.parseDouble(maxRangeTextfield.getText()), this.start, this.target);
+            for (int i=0;i<pathObjList.size(); i++){                    
             		data[i][0] = String.valueOf(pathObjList.get(i).calculate_geometric(Double.parseDouble(minRangeTextfield.getText()), Double.parseDouble(maxRangeTextfield.getText()), cur_Network));
                     data[i][1] = listModel.elementAt(i).toString();
                     data[i][2] = namesListModel.elementAt(i).toString();
@@ -871,9 +761,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                 ((JLabel) headerRenderer).setHorizontalAlignment(JLabel.CENTER);
             }
 
-            //CySwingAppAdapter cySwingAppAdapter = adapter.get
-            
-            //CytoPanel resultsPanel = cySwingAppAdapter.getCySwingApplication().getCytoPanel(CytoPanelName.EAST);
             resultsPanel.setLayout(new BoxLayout(resultsPanel,BoxLayout.PAGE_AXIS));
             resultsPanel.removeAll();
 
@@ -887,7 +774,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                 new ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent e) {
                         ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-                        //CyNetwork net = Cytoscape.getCurrentNetwork();
                         CyNetwork net = adapter.getCyApplicationManager().getCurrentNetwork();
                         
                         List<CyNode> nodelist = net.getNodeList();
@@ -905,11 +791,9 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                             for (int i = 0; i < realRows.length; i++) {
                                     for (int j=0;j<pathObjList.get(realRows[i]).nodeList.size();j++){
                                     	net.getRow(pathObjList.get(realRows[i]).nodeList.get(j)).set("selected", true);
-                                        //net.setSelectedNodeState(Cytoscape.getCyNode(pathObjList.get(realRows[i]).nodeList.get(j)), true);
                                     }
                             }
                         }
-                        //Cytoscape.getCurrentNetworkView().updateView();
                         CyEventHelper eventhelper = adapter.getCyEventHelper();
                         eventhelper.flushPayloadEvents();
                     }
@@ -922,16 +806,9 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             for (int i = 0; i < data.length; i++){
                 resEnt = new ResultEntry(Float.parseFloat(data[i][0]), data[i][1], data[i][1].replaceAll("[^,]","").length(), data[i][2]);
                 entryList.add(resEnt);
-            }
-            
-                   
+            }     
 
             pathfinderModel.add(entryList);
-            
-            //resultsPanel.add(resultTable);
-            
-           
-            
             
         }
 
@@ -944,7 +821,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             String tempName = new String();
             nodeAttributeCombox.removeAllItems();
             
-            //for(int i=0;i<networkAttrNames.length;i++){
             for (CyColumn attr : networkAttr){
                
             	System.out.println(attr.toString());
@@ -959,66 +835,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             }
         }
         
-        //Update combobox to include all actual node attributes of the network
-//        if(arg0.getSource().equals(this.scoreComplexButton)){
-//        	CyNetwork current_Network = adapter.getCyApplicationManager().getCurrentNetwork();
-//            Collection<CyColumn> networkAttr =  current_Network.getDefaultNodeTable().getColumns();
-//            CyColumn[] networkAttrNames = networkAttr.toArray(new CyColumn[networkAttr.size()]);
-//            String tempName = new String();
-//            nodeAttributeCombox.removeAllItems();
-//            
-//            //for(int i=0;i<networkAttrNames.length;i++){
-//            for (CyColumn attr : networkAttr){
-//               
-//                if(attr.toString().length()>20){
-//                        tempName = attr.toString().substring(0, 19);
-//                }
-//                else {
-//                    tempName = attr.toString();
-//                }
-//                
-//                nodeAttributeCombox.addItem(tempName);
-//            }
-//        }
-        
-
-        //Action for select all pathways for selected nodes. 
-        /*if(arg0.getSource().equals(this.selectPathsFromNodesButton)){
-            List<Integer> subNetworkNodes = new ArrayList<Integer>();
-            CyNetwork current_Network = Cytoscape.getCurrentNetwork();
-            CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
-            String protIdentifier;
-            if (current_Network != null) {
-                Set selectedNodes = current_Network.getSelectedNodes();
-
-                if (selectedNodes.size() == 0) {
-                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(),"Nothing is selected!");
-                }
-                else if(selectedNodes.size() > 0) {
-                    String nodeStrings = selectedNodes.toString();
-                    nodeStrings = nodeStrings.substring(1,nodeStrings.length()-1);
-                    List<String> items = Arrays.asList(nodeStrings.split("\\s*,\\s*"));
-
-                    for (String it: items){
-                        protIdentifier = it;
-                        Iterator<ResPath> at = pathObjList.iterator();
-                        while (at.hasNext()){
-                            List<String> nodeName = at.next().getNodeList();
-                            if (nodeName.contains(protIdentifier)){
-                                for (int i = 0; i<nodeName.size();i++){
-                                    current_Network.setSelectedNodeState(Cytoscape.getCyNode(nodeName.get(i)),true);
-                                }
-                            }
-                        }
-                    }
-                    Cytoscape.getCurrentNetworkView().updateView();
-                }
-                else {
-                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(),"There is no current Network");
-                }
-            }
-
-        }*/
 
         if(arg0.getSource().equals(this.depthSearchButton)){
             this.pfadliste.clear();
@@ -1027,7 +843,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             this.maxcount = Integer.parseInt(stepNumberTextfield.getText());
 
             CyNetwork current_Network = adapter.getCyApplicationManager().getCurrentNetwork();
-            //CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
             pathObjList = new ArrayList<ResPath>();
             if (current_Network != null) {
                 List<CyNode> selectedNodes = CyTableUtil.getNodesInState(current_Network, "selected", true);
@@ -1089,7 +904,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                 List<CyNode> nodeArray = subNetworkNodes;
                 List<CyEdge> edgeArray = new ArrayList<CyEdge>();
                 for (CyNode node : nodeArray){
-                	//List<CyEdge> tempEdgeArray = current_root_Network.getAdjacentEdgeList(node, CyEdge.Type.valueOf("ANY"));
                 	for (CyNode node2 : nodeArray){
                 		List<CyEdge> tempEdgeArray = current_root_Network.getConnectingEdgeList(node, node2, CyEdge.Type.valueOf("ANY"));
                 		
@@ -1104,14 +918,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                 
                 adapter.getCyNetworkManager().addNetwork(newNet);      
                 
-                
-//                int [] nodeArray = ArrayUtils.toPrimitive(subNetworkNodes.toArray(new Integer[subNetworkNodes.size()]));
-//                int [] edgeArray = current_Network.getConnectingEdgeIndicesArray(nodeArray);
-//
-//
-//                CyNetwork newNet = Cytoscape.createNetwork(nodeArray,edgeArray,"Child" + childnetworkindex ,current_Network);				
-//                newNet.setSelectedNodeState(this.start, true);
-
                 int tempindex = Integer.parseInt(childnetworkindex);
                 tempindex++;
                 childnetworkindex = "" + tempindex;
@@ -1121,26 +927,12 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             }
         }
 
-        //if(arg0.getSource().equals(this.exportResultsTableButton)){
-          /*  int retVal = resultFileChooser.showSaveDialog(Cytoscape.getDesktop());
-            if (retVal == JFileChooser.APPROVE_OPTION) {
-                File file = resultFileChooser.getSelectedFile();
-                exportTableDataToCSV(resultTable, file);
-            }*/
-        //}
-        
         //Select Startlist of proteins for batchprcessing
         if(arg0.getSource().equals(this.startProtSelectionButton)){
             CyNetwork current_Network1 = adapter.getCyApplicationManager().getCurrentNetwork();            
             if (current_Network1 != null) {
             	startProteinNodeList = new ArrayList<CyNode>(CyTableUtil.getNodesInState(current_Network1, "selected", true).size());
             	startProteinNodeList = CyTableUtil.getNodesInState(current_Network1, "selected", true);
-//                Iterator<CyNode> it = startProteinList.iterator();
-//                while (it.hasNext()){
-//                    startProteinNodeList.add(it.next());
-//                }
-//                System.out.println("No of selected nodes: " + String.valueOf(startProteinList.size()));
-            	//System.out.println(startProteinNodeList.size());
             }
         }
         
@@ -1150,11 +942,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             if (current_Network2 != null) {
             	endProteinNodeList = new ArrayList<CyNode>(CyTableUtil.getNodesInState(current_Network2, "selected", true).size());
             	endProteinNodeList = CyTableUtil.getNodesInState(current_Network2, "selected", true);
-//                Iterator<CyNode> it = endProteinList.iterator();
-//                while (it.hasNext()){
-//                    endProteinNodeList.add(it.next());
-//                }
-                //System.out.println("No of selected nodes: " + endProteinList.size());
             }
         }
         
@@ -1167,9 +954,8 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
 
             this.maxcount = Integer.parseInt(stepNumberTextfield.getText());
             
-            //CyRootNetworkManager roomgr = adapter.getCyRootNetworkManager();
             CyNetwork current_Network = adapter.getCyApplicationManager().getCurrentNetwork();
-            //CyAttributes cyAttrList = Cytoscape.getNodeAttributes();
+
             if (current_Network != null) {
                 
                 if (startProteinNodeList.isEmpty() || endProteinNodeList.isEmpty()) {
@@ -1193,31 +979,17 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
 
                             while (ilist.hasNext()){
                                 List<CyNode> strlist = ilist.next();
-//                                pathObjList.add(new ResPath(pathObjList.size()));
 
                                 Iterator<CyNode> istring = strlist.iterator();
 
                                 while (istring.hasNext()){
                                     CyNode tempstring = istring.next();
 
-                                                                        
-                                    //create nodeobjects in paths for scoring
-                                    //If Node does not exist yet create it
-//                                    if (!nodeObjList.containsKey(tempstring)){
-//                                            nodeObjList.put(tempstring, new ResNode(tempstring));
-//                                    }
-
-                                    //store actual nodeidentifier to belong to the path
-//                                    pathObjList.get(pathObjList.size()-1).nodeList.add(tempstring);
-
                                     if (!subNetworkNodes.contains(tempstring)) {
                                         subNetworkNodes.add(tempstring);
                                     }
 
                                 }
-//                                pos = resList.getModel().getSize();
-//                                listModel.add(pos, tempPath);
-//                                namesListModel.add(pos, tempPathNames);
                                 tempPathNames = "";
                                 tempPath = "";
                             }
@@ -1236,7 +1008,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                 List<CyNode> nodeArray = subNetworkNodes;
                 List<CyEdge> edgeArray = new ArrayList<CyEdge>();
                 for (CyNode node : nodeArray){
-                	//List<CyEdge> tempEdgeArray = current_root_Network.getAdjacentEdgeList(node, CyEdge.Type.valueOf("ANY"));
                 	for (CyNode node2 : nodeArray){
                 		List<CyEdge> tempEdgeArray = current_root_Network.getConnectingEdgeList(node, node2, CyEdge.Type.valueOf("ANY"));
                 		
@@ -1250,39 +1021,18 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                 newNet.getRow(newNet).set(CyNetwork.NAME, "Child"+ childnetworkindex);
                 
                 adapter.getCyNetworkManager().addNetwork(newNet);       
-                
-//                List<CyNode> nodeArray = subNetworkNodes;
-//                List<CyEdge> edgeArray = new ArrayList<CyEdge>();
-//                for (CyNode node : nodeArray){
-//                	List<CyEdge> tempEdgeArray = current_Network.getAdjacentEdgeList(node, CyEdge.Type.valueOf(null, "ANY"));
-//                	for (CyEdge edge : tempEdgeArray){
-//                		edgeArray.add(edge);
-//                	}                	
-//                }
-                
-
-                //CyNetworkFactory networkfactory = adapter.getCyNetworkFactory();
-                //CySubNetwork newNet = networkfactory.createNetwork();
-//                CySubNetwork newNet = current_Network.addSubNetwork(nodeArray, edgeArray);
-                
-                //int [] nodeArray = ArrayUtils.toPrimitive(subNetworkNodes.toArray(new Integer[subNetworkNodes.size()]));
-                //int [] edgeArray = current_Network.getConnectingEdgeIndicesArray(nodeArray);
-
-                //CyNetwork newNet = Cytoscape.createNetwork(nodeArray,edgeArray,"Child"+ childnetworkindex,current_Network);
-//                newNet.setSelectedNodeState(this.start, true);
-//                newNet.setSelectedNodeState(this.target, true);
 
                 int tempindex = Integer.parseInt(childnetworkindex);
                 tempindex++;
                 childnetworkindex = "" + tempindex;
             }
             else {
-                    //JOptionPane.showMessageDialog(Cytoscape.getDesktop(),"There is no current Network");
                     JOptionPane.showMessageDialog(null,"There is no current Network");
             }
         }
     }
 
+	//Result node class
 	public class ResNode {
             public CyNode nodeId;
             private HashMap<String, Object> hm;
@@ -1301,6 +1051,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             }
 	}
 	
+	//Result path consisting of result nodes
 	public class ResPath {
             public int pathId;
             public double rating;
@@ -1336,41 +1087,8 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
                     tempHash.put(attrName, obj);
                     nodeAttHashMap.put(nodeId, tempHash);
             }
-
-//            public String calculate_rating(double lowerBound, double upperBound, CyNode start, CyNode target, CyNetwork current_Network){
-//                //counter for differently epressed genes
-//                int diffExpLvl = 0;
-//                int pathlength = this.nodeList.size()-2;
-//                CyNode aktNode = null;
-//                //CyNetwork current_Network = adapter.getCyApplicationManager().getCurrentNetwork();
-//                //CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
-//
-//                try{
-//                    Iterator <CyNode> it = nodeList.iterator();
-//                    while (it.hasNext()){
-//                        aktNode = it.next();
-//                        if (!nodeAttributeCombox.getSelectedItem().toString().isEmpty()){
-//                                if (((current_Network.getRow(aktNode).get(nodeAttributeCombox.getSelectedItem().toString(), Double.class) < lowerBound) || 
-//                                            (current_Network.getRow(aktNode).get(nodeAttributeCombox.getSelectedItem().toString(), Double.class) > upperBound)) && !(aktNode.equals(start) || aktNode.equals(target))){
-//                                        diffExpLvl++;
-//                                }
-//                            }
-//                    }
-//                }
-//                catch(NullPointerException e){
-//                    System.out.println(e);
-//                    //System.out.println(cyNodeAttrs.getDoubleAttribute(aktNode, nodeAttributeCombox.getSelectedItem().toString()));
-////                            System.out.println(e);
-//                }
-//
-//                if (this.nodeList.size() == 2){
-//                    return "10";
-//                }
-//                else
-//                this.rating = (double) diffExpLvl/(pathlength * pathlength);
-//                return (double) diffExpLvl/(pathlength * pathlength) + "";
-//            }
             
+			//Perform fisher test
             public double calculate_geometric(double lowerBound, double upperBound, CyNetwork current_Network){
             	int diffExpLvl = 0;
             	int pathLength = nodeList.size();            
@@ -1390,8 +1108,6 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
 	              }
 	              catch(NullPointerException e){
 	                  System.out.println(e);
-	                  //System.out.println(cyNodeAttrs.getDoubleAttribute(aktNode, nodeAttributeCombox.getSelectedItem().toString()));
-	//                          System.out.println(e);
 	              }
             	
             	Hypergeometric hypeScore = new Hypergeometric(pathLength, popuSize, diffNodes);
@@ -1413,6 +1129,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             return rowColors;
         }
         
+		//Result table model
         protected TableColumnModel createColumnModel(){
             DefaultTableColumnModel columnModel = new DefaultTableColumnModel();
             
@@ -1449,6 +1166,7 @@ public class viPErApp extends AbstractCyApp implements ActionListener{
             return columnModel;
         }
         
+		//CSV export function
         private static void exportTableDataToCSV(JTable table, File file) {
             try {
                 file.createNewFile();

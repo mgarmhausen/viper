@@ -10,6 +10,7 @@ import javax.swing.JTable;
 /**
  *
  * @author MGarmhausen
+ * Renders table cells with switching row colors
  */
 public class PathfinderCellRenderer {
     
